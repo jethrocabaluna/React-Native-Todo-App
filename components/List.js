@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native'
+import {View, StyleSheet} from 'react-native'
+
+import Todo from './Todo'
 
 export default class List extends Component {
     priorityData = {
@@ -10,12 +12,11 @@ export default class List extends Component {
 
     renderItem = (todo, i) => {
         return (
-            <TouchableOpacity   key={i}
-                                style={styles.item}
-                                onPress={() => this.props.onRemoveTodo(todo.id)}>
-                <Text>{todo.title}</Text>
-                <Text>Priority: {this.priorityData[todo.priority]}</Text>
-            </TouchableOpacity>
+            <Todo   key={i}
+                    onRemoveTodo={() => this.props.onRemoveTodo(todo.id)}
+                    title={todo.title}
+                    priority={this.priorityData[todo.priority]}
+                    descriptionList={todo.descriptionList} />
         )
     }
 

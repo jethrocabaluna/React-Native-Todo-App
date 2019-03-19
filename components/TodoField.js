@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, TextInput, Text, StyleSheet} from 'react-native'
+import {View, TextInput, Text, Button, StyleSheet} from 'react-native'
 
 import RadioGroup from 'react-native-radio-buttons-group'
 
@@ -9,7 +9,8 @@ export default class TodoField extends Component {
             title: '',
             priority: 1,
             descriptionList: []
-        }
+        },
+        isExpanded: false
     }
 
     initialTodo = {
@@ -21,15 +22,21 @@ export default class TodoField extends Component {
     priorityOptions = [
         {
             label: 'low',
-            value: 1
+            value: 1,
+            size: 12,
+            color: '#96d88f'
         },
         {
             label: 'medium',
-            value: 2
+            value: 2,
+            size: 12,
+            color: '#e8ba45'
         },
         {
             label: 'high',
-            value: 3
+            value: 3,
+            size: 12,
+            color: '#e0490d'
         }
     ]
 
@@ -40,6 +47,12 @@ export default class TodoField extends Component {
                 ...this.state.todo,
                 priority: data.find(e => e.selected === true).value
             }
+        })
+    }
+
+    onToggleField = () => {
+        this.setState({
+            isExpanded: !this.state.isExpanded
         })
     }
 
@@ -55,16 +68,22 @@ export default class TodoField extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <TextInput  style={styles.textInput}
-                            value={this.state.todo.title}
-                            placeholder='Type title and hit enter to add'
-                            placeholderTextColor='#aaa'
-                            onChangeText={this.onChangeTitle}
-                            onSubmitEditing={this.onSubmitEditing} />
-                <Text style={styles.label}>Priority:</Text>
-                <RadioGroup radioButtons={this.priorityOptions}
-                            onPress={this.onChangePriority}
-                            flexDirection='row' />
+                <View>
+                    <Button onPress={this.onToggleField}
+                        title={this.state.isExpanded ? 'x' : '+'} />
+                </View>
+                <View style={this.state.isExpanded ? null : styles.fieldClosed}>
+                    <TextInput  style={styles.textInput}
+                                value={this.state.todo.title}
+                                placeholder='Type title and hit enter to add'
+                                placeholderTextColor='#aaa'
+                                onChangeText={this.onChangeTitle}
+                                onSubmitEditing={this.onSubmitEditing} />
+                    <Text style={styles.label}>Priority:</Text>
+                    <RadioGroup radioButtons={this.priorityOptions}
+                                onPress={this.onChangePriority}
+                                flexDirection='row' />
+                </View>
             </View>
         )
     }
@@ -84,5 +103,8 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16,
         color: '#666'
+    },
+    fieldClosed: {
+        display: 'none'
     }
 })
